@@ -1,28 +1,41 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import List from './List';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+  constructor(){
+    super();
+    this.state={
+      input:'',
+      list:[]
+    }
+    this.deleteItem=this.deleteItem.bind(this);
+    this.handleKeyPress=this.handleKeyPress.bind(this);
+    this.changeHandler=this.changeHandler.bind(this);
   }
+
+  changeHandler(e){
+    this.setState({input: e.target.value})
+  }
+  handleKeyPress(e){
+    let newList=this.state.list.slice();
+    if(e.key==='Enter'){
+      newList.push(this.state.input);
+      this.setState({list:newList})
+    }
+  }
+  deleteItem(index){
+    let tempList=this.state.list.slice();
+    tempList.splice(index,1);
+    this.setState({list:tempList})
+  }
+
+render(){
+  return<div className='App'>
+  <input type="text" placeholder='New Task' onKeyPress={(e)=>this.handleKeyPress(e)} onChange={(e)=>this.changeHandler(e)}></input>
+  <List list={this.state.list} deleteItem={this.deleteItem}></List>
+  </div>
+}
 }
 
 export default App;
